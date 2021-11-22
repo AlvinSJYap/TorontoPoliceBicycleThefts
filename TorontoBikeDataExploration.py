@@ -6,6 +6,7 @@ Created on Sun Nov 21 00:59:29 2021
 """
 
 import pandas as pd 
+import math 
 
 import os
 path = ".\data"
@@ -73,5 +74,5 @@ print(bike_df.isnull().sum())
 The initial Data is cleaned up, we can save a copy of this as step 1. In step 2, we determine if there are any outliers 
 in the data set and can be removed.
 '''
-bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep1.csv')
+#bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep1.csv')
 
