@@ -2,7 +2,7 @@
 """
 Created on Sun Nov 21 00:59:29 2021
 
-@author: asjya
+@author: Alvin Yap
 """
 
 import pandas as pd
@@ -92,11 +92,44 @@ bike_df['Cost_of_Bike'] = bike_df['Cost_of_Bike'].fillna(bike_df['Cost_of_Bike']
 printSeparator("# of Null Values:")
 print(bike_df.isnull().sum())
 
+
+'''
+The feature we will be targeting is the status of the bike. All bikes are stolen in this data set so we cannot do a 
+predicition on the likeliness of a bike being stolen. We can however predict if a stolen bike is likly to be recovered.
+One interesting data point that is not immediately available in this data set is the time between report and occurrence.
+
+We will add this column as Report Lag
+
+'''
+
+bike_df['Report_Lag'] = bike_df['Report_Date'] - bike_df['Occurrence_Date']
+printSeparator('bike_df.Report_Lag:')
+print(bike_df['Report_Lag'])
+
+
+'''
+Looking at status, we have 3 categories, however the 3rd category is unknown. This does not help us
+in any case for our prediction since it inidicates that there was no colncusion (no follow up on if the bike was
+                                                                                 found or not).
+
+Get the row #'s that contain unknown and remove them
+'''
+
+#These are the rows that contain unknown in the status column.
+
+dropped_rows= bike_df[ bike_df['Status'] == 'UNKNOWN'].index
+print(dropped_rows)
+
+bike_df = bike_df.drop(dropped_rows)
+
+bike_df.reset_index()
+
+print(bike_df)
 '''
 The initial Data is cleaned up, we can save a copy of this as step 1. In step 2, we determine if there are any outliers
 in the data set and can be removed.
 '''
-#bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep1.csv')
+bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep1.csv')
 
 # plt.figure()
 
