@@ -125,6 +125,14 @@ bike_df = bike_df.drop(dropped_rows)
 bike_df.reset_index()
 
 print(bike_df)
+
+
+#Don't need event_unique_id
+bike_df = bike_df.drop('event_unique_id', 1)
+
+
+
+#Hot encode the rest of the categorical data
 '''
 The initial Data is cleaned up, we can save a copy of this as step 1. In step 2, we determine if there are any outliers
 in the data set and can be removed.
