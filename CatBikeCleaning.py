@@ -11,7 +11,7 @@ a binary, that would be ideal otherwise we will have to oneHotEncode.
 
 import pandas as pd
 
-import math
+
 import os
 
 def printSeparator(value):
@@ -202,15 +202,49 @@ cat_bike_df = cat_bike_df.drop('NeighbourhoodName', 1)
 '''
 Location_Type
 
-Split onto the following:
-1.TTC
-2.GO
+go from 42 location types to 10.
+
+
 '''
 
-printSeparator(' Unique Values in Location_Type')
-print(pd.unique(cat_bike_df['Location_Type'].values))
-cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('ttc', case=False),'Location_Type'] = 'TTC'
-cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('go', case=False),'Location_Type'] = 'GO'
-cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('coporate', case=False),'Location_Type'] = 'Corporate'
+printSeparator(' Unique Values in Location_Type : Before')
+#print(pd.unique(cat_bike_df['Location_Type'].values))
+print(cat_bike_df['Location_Type'].value_counts())
+cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('ttc', case=False),'Location_Type'] = 'Public Transit Hub'
+cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('go', case=False),'Location_Type'] = 'Public Transit Hub'
+cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('transit', case=False),'Location_Type'] = 'Public Transit Hub'
+cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('train', case=False),'Location_Type'] = 'Public Transit Hub'
+cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('Non-Profit', case=False),'Location_Type'] = 'Non-Commerical/Public Areas'
+cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('religious', case=False),'Location_Type'] = 'Non-Commerical/Public Areas'
+cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('schools', case=False),'Location_Type'] = 'Non-Commerical/Public Areas'
+cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('For Profit', case=False),'Location_Type'] = 'Commericial / Corporate Areas'
+cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('bank', case=False),'Location_Type'] = 'Commericial / Corporate Areas'
+cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('hotel', case=False),'Location_Type'] = 'Commericial / Corporate Areas'
+cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('dealership', case=False),'Location_Type'] = 'Commericial / Corporate Areas'
+cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('medical', case=False),'Location_Type'] = 'Medical Facilities'
+cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('pharmacy', case=False),'Location_Type'] = 'Medical Facilities'
+cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('jail', case=False),'Location_Type'] = 'Corrections Facilities'
+cat_bike_df.loc[cat_bike_df['Location_Type'].str.contains('police', case=False),'Location_Type'] = 'Corrections Facilities'
 
-print(pd.unique(cat_bike_df['Location_Type'].values))
+printSeparator(' Unique Values in Location_Type : After')
+print(cat_bike_df['Location_Type'].value_counts())
+
+
+'''
+Premises_Type: These are already nicely grouped, can be easily oneHotEncoded.
+
+'''
+printSeparator(' Unique Values in Premises_Type')
+print(cat_bike_df['Premises_Type'].value_counts())
+
+'''
+Bike_Make. Here we have ALOT of bike makes. We should only really take any statistically relvanant ones
+
+'''
+
+printSeparator(' Unique Values in Location_Type : Before')
+#print(pd.unique(cat_bike_df['Bike_Make'].values))
+print(cat_bike_df['Bike_Make'].value_counts().head(30))
+
+
+
