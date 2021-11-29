@@ -137,9 +137,10 @@ bike_df = bike_df.drop('event_unique_id', 1)
 The initial Data is cleaned up, we can save a copy of this as step 1. In step 2, we determine if there are any outliers
 in the data set and can be removed.
 '''
-bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep1.csv')
+# bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep1.csv')
 
-# plt.figure()
+test_plot_x = bike_df['Cost_of_Bike']
+test_plot_y = bike_df['Bike_Speed']
 
-# bike_df.plot()
-# plt.show()
+plt.plot(test_plot_x, test_plot_y)
+plt.show()
