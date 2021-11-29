@@ -145,17 +145,23 @@ Cleanup values
 '''
 bike_df['Cost_of_Bike'] = bike_df['Cost_of_Bike'].round()
 
-print('max price', bike_df['Cost_of_Bike'].max())
+maxPrice = bike_df['Cost_of_Bike'].max()
 
+
+# remove outliers
+q = bike_df["Cost_of_Bike"].quantile(0.99)
+df_filtered = bike_df[bike_df["Cost_of_Bike"] < q]
+
+print('max price', maxPrice)
+print(bike_df.loc[bike_df['Cost_of_Bike'] == maxPrice]['Bike_Model'])
 bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep2.csv')
 
 
 '''
 Plotting stuff
 '''
-test_plot_x = bike_df['Cost_of_Bike']
-test_plot_y = bike_df['Status'].apply(lambda x: 0 if x == 'STOLEN' else 1)
-
+test_plot_x = df_filtered['Cost_of_Bike']
+test_plot_y = df_filtered['Status'].apply(lambda x: 0 if x == 'STOLEN' else 1)
 
 plt.plot(test_plot_x, test_plot_y, marker='.')
 
