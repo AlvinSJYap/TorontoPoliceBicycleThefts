@@ -106,7 +106,6 @@ bike_df['Report_Lag'] = bike_df['Report_Date'] - bike_df['Occurrence_Date']
 printSeparator('bike_df.Report_Lag:')
 print(bike_df['Report_Lag'])
 
-
 '''
 Looking at status, we have 3 categories, however the 3rd category is unknown. This does not help us
 in any case for our prediction since it inidicates that there was no colncusion (no follow up on if the bike was
@@ -137,8 +136,21 @@ bike_df = bike_df.drop('event_unique_id', 1)
 The initial Data is cleaned up, we can save a copy of this as step 1. In step 2, we determine if there are any outliers
 in the data set and can be removed.
 '''
-# bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep1.csv')
 
+bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep1.csv')
+
+
+'''
+Cleanup values
+'''
+bike_df['Cost_of_Bike'] = bike_df['Cost_of_Bike'].round()
+
+bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep2.csv')
+
+
+'''
+Plotting stuff
+'''
 test_plot_x = bike_df['Cost_of_Bike']
 test_plot_y = bike_df['Bike_Speed']
 
