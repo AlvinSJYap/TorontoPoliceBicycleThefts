@@ -145,6 +145,8 @@ Cleanup values
 '''
 bike_df['Cost_of_Bike'] = bike_df['Cost_of_Bike'].round()
 
+print('max price', bike_df['Cost_of_Bike'].max())
+
 bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep2.csv')
 
 
@@ -152,7 +154,13 @@ bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep2.csv')
 Plotting stuff
 '''
 test_plot_x = bike_df['Cost_of_Bike']
-test_plot_y = bike_df['Bike_Speed']
+test_plot_y = bike_df['Status'].apply(lambda x: 0 if x == 'STOLEN' else 1)
 
-plt.plot(test_plot_x, test_plot_y)
+
+plt.plot(test_plot_x, test_plot_y, marker='.')
+
+plt.xlabel('Cost of Bike')
+plt.ylabel('Stolen?')
+plt.title('Cost vs Status')
+
 plt.show()
