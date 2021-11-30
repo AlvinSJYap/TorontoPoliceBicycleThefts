@@ -149,24 +149,32 @@ maxPrice = bike_df['Cost_of_Bike'].max()
 
 
 # remove outliers
-q = bike_df["Cost_of_Bike"].quantile(0.99)
-df_filtered = bike_df[bike_df["Cost_of_Bike"] < q]
 
-print('max price', maxPrice)
-print(bike_df.loc[bike_df['Cost_of_Bike'] == maxPrice]['Bike_Model'])
+q1 = bike_df["Cost_of_Bike"].quantile(0.25)
+q3 = bike_df["Cost_of_Bike"].quantile(0.75)
+
+iqr = q3 - q1
+
+lower_bound  = q1 - (1.5  * iqr)
+upper_bound = q3 + (1.5 * iqr)
+
+df_no_outliers = bike_df.loc[(bike_df["Cost_of_Bike"] > lower_bound) & (bike_df["Cost_of_Bike"] < upper_bound)]
+
+print(df_no_outliers.describe(include='all', datetime_is_numeric=True))
+
+print('Most expensive bike', maxPrice)
 bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep2.csv')
 
 
 '''
 Plotting stuff
 '''
-test_plot_x = df_filtered['Cost_of_Bike']
-test_plot_y = df_filtered['Status'].apply(lambda x: 0 if x == 'STOLEN' else 1)
+test_plot_x = df_no_outliers['Cost_of_Bike']
+test_plot_y = df_no_outliers['Status'].apply(lambda x: 0 if x == 'STOLEN' else 1)
 
 import seaborn as sns
 
-
-plt.figure(figsize=(7,7,))
-ax = sns.boxenplot(x='Cost_of_Bike', y='Status', data=df_filtered),;
+plt.figure(figsize=(17,7,))
+ax = sns.boxplot(x='Cost_of_Bike', data=df_no_outliers),;
 
 plt.show()
