@@ -116,7 +116,7 @@ Get the row #'s that contain unknown and remove them
 
 #These are the rows that contain unknown in the status column.
 
-dropped_rows= bike_df[ bike_df['Status'] == 'UNKNOWN'].index
+dropped_rows = bike_df[ bike_df['Status'] == 'UNKNOWN'].index
 print(dropped_rows)
 
 bike_df = bike_df.drop(dropped_rows)
@@ -129,7 +129,11 @@ print(bike_df)
 #Don't need event_unique_id
 bike_df = bike_df.drop('event_unique_id', 1)
 
+#Don't need X
+bike_df = bike_df.drop('X', 1)
 
+#Don't need Y
+bike_df = bike_df.drop('Y', 1)
 
 #Hot encode the rest of the categorical data
 '''
