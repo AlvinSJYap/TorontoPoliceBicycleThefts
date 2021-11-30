@@ -117,6 +117,7 @@ Get the row #'s that contain unknown and remove them
 #These are the rows that contain unknown in the status column.
 
 dropped_rows = bike_df[ bike_df['Status'] == 'UNKNOWN'].index
+
 print(dropped_rows)
 
 bike_df = bike_df.drop(dropped_rows)
@@ -124,7 +125,6 @@ bike_df = bike_df.drop(dropped_rows)
 bike_df.reset_index()
 
 print(bike_df)
-
 
 #Don't need event_unique_id
 bike_df = bike_df.drop('event_unique_id', 1)
@@ -175,6 +175,15 @@ Plotting stuff
 '''
 test_plot_x = df_no_outliers['Cost_of_Bike']
 test_plot_y = df_no_outliers['Status'].apply(lambda x: 0 if x == 'STOLEN' else 1)
+
+stolenCount = bike_df[bike_df['Status'] == 'STOLEN']['Status'].count()
+recoveredCount = bike_df[bike_df['Status'] == 'RECOVERED']['Status'].count()
+
+fig1, ax1 = plt.subplots()
+
+labels = 'Stolen', 'Recovered'
+ax1.pie([stolenCount, recoveredCount], labels=labels, autopct='%1.1f%%')
+ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 
 import seaborn as sns
 
