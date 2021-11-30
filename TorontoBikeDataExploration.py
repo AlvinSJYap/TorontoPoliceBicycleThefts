@@ -163,10 +163,10 @@ Plotting stuff
 test_plot_x = df_filtered['Cost_of_Bike']
 test_plot_y = df_filtered['Status'].apply(lambda x: 0 if x == 'STOLEN' else 1)
 
-plt.plot(test_plot_x, test_plot_y, marker='.')
+import seaborn as sns
 
-plt.xlabel('Cost of Bike')
-plt.ylabel('Stolen?')
-plt.title('Cost vs Status')
+
+plt.figure(figsize=(7,7,))
+ax = sns.boxenplot(x='Cost_of_Bike', y='Status', data=df_filtered),;
 
 plt.show()
