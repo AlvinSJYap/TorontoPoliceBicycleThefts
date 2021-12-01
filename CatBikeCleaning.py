@@ -35,7 +35,7 @@ print(pd.unique(cat_bike_df['Primary_Offence'].values))
 
 '''
 In order to make this column more manageable, we will relabel the unique values and group many of them under
-a similar category. This one will be hot encoded.
+a similar category. This one will be one hot encoded.
 
 Categories:
     1.Theft
@@ -238,13 +238,88 @@ printSeparator(' Unique Values in Premises_Type')
 print(cat_bike_df['Premises_Type'].value_counts())
 
 '''
-Bike_Make. Here we have ALOT of bike makes. We should only really take any statistically relvanant ones
+Bike_Model: A majority a large subset of this column is unknown. We can safely drop this column from the model
+as it provides us with no meanifull information. 40% of the models are unknown. No other Model
+makes up for more than 0.5% of the missing bikes 
 
 '''
 
-printSeparator(' Unique Values in Location_Type : Before')
+printSeparator(' Unique Values in Bike_Model')
+print(cat_bike_df['Bike_Model'].value_counts(normalize=True).head())
+
 #print(pd.unique(cat_bike_df['Bike_Make'].values))
-print(cat_bike_df['Bike_Make'].value_counts().head(30))
+cat_bike_df = cat_bike_df.drop(['Bike_Model'], axis=1)
 
 
 
+'''
+
+Bike_Type: This column is suitable for oneHotencoding and does not need to be regrouped.
+'''
+printSeparator(' Unique Values in Bike_Type')
+print(cat_bike_df['Bike_Type'].value_counts())
+
+
+'''
+Bike_Colour: group up everything that is under LBL together as OTHER.
+
+'''
+
+
+printSeparator(' Unique Values in Bike_Colour : Before')
+print(cat_bike_df['Bike_Colour'].value_counts())
+print(cat_bike_df['Bike_Colour'].value_counts(normalize=True).head(20))
+
+allowed_vals = ['BLK','BLU','GRY','Unknown Colour','WHI','RED','SIL','GRN','ONG','PLE','DBL','YEL','LBL']
+cat_bike_df.loc[~cat_bike_df['Bike_Colour'].isin(allowed_vals), "Bike_Colour"] = "Other"
+printSeparator(' Unique Values in Bike_Colour : After')
+print(cat_bike_df['Bike_Colour'].value_counts(normalize=True))
+
+
+'''
+Report Lag: substring the first value since thats the numerical value we want.
+
+'''
+
+printSeparator(' Unique Values in Report Lag: Before')
+print(cat_bike_df['Report_Lag'].value_counts())
+
+
+cat_bike_df['Report_Lag'] = cat_bike_df['Report_Lag'].str[:-4]
+cat_bike_df['Report_Lag'] = cat_bike_df['Report_Lag'].astype('int32')
+print(cat_bike_df['Report_Lag'].value_counts())
+
+
+'''
+Bike_Make: The way the data is disrubuted, i believe that this column has very little to offer in terms 
+determining if a bike is to be returned. The cardinality is to high, and there seems to be very little correlation.
+
+'''
+printSeparator(' Unique Values in Bike_Make')
+print(cat_bike_df['Bike_Make'].value_counts(normalize=True).head(20))
+cat_bike_df = cat_bike_df.drop(['Bike_Make'], axis=1)
+print(cat_bike_df.dtypes)
+print(cat_bike_df.nunique())
+
+#replace the values from the old dataframe with those after we cleaned
+bike_df.loc[:, ['Primary_Offence','Occurrence_Month','Occurrence_DayOfWeek','Report_Month','Report_DayOfWeek','Division','City','Hood_ID','Location_Type','Premises_Type','Bike_Type','Bike_Colour','Status','Report_Lag']] = cat_bike_df[['Primary_Offence','Occurrence_Month','Occurrence_DayOfWeek','Report_Month','Report_DayOfWeek','Division','City','Hood_ID','Location_Type','Premises_Type','Bike_Type','Bike_Colour','Status','Report_Lag']]
+
+
+'''
+
+Remove columns from this data set that do not help the model
+'''
+bike_df = bike_df.drop('Occurrence_Date', 1)
+bike_df = bike_df.drop('Report_Date', 1)
+bike_df = bike_df.drop(['Bike_Make'], axis=1)
+bike_df = bike_df.drop('NeighbourhoodName', 1)
+bike_df = bike_df.drop(['Bike_Model'], axis=1)
+bike_df = bike_df.drop(['ObjectId2'], axis=1)
+bike_df = bike_df.drop(['Longitude'], axis=1)
+bike_df = bike_df.drop(['Latitude'], axis=1)
+bike_df = bike_df.drop(['Unnamed: 0'], axis=1)
+bike_df = bike_df.drop(['X'], axis=1)
+bike_df = bike_df.drop(['Y'], axis=1)
+bike_df = bike_df.drop(['OBJECTID'], axis=1)
+
+bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep2.csv')
