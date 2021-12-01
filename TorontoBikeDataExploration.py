@@ -9,6 +9,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import math
 import os
+import seaborn as sns
 
 def printSeparator(value):
   print('\n' * 4)
@@ -116,7 +117,8 @@ Get the row #'s that contain unknown and remove them
 
 #These are the rows that contain unknown in the status column.
 
-dropped_rows= bike_df[ bike_df['Status'] == 'UNKNOWN'].index
+dropped_rows = bike_df[ bike_df['Status'] == 'UNKNOWN'].index
+
 print(dropped_rows)
 
 bike_df = bike_df.drop(dropped_rows)
@@ -125,11 +127,14 @@ bike_df.reset_index()
 
 print(bike_df)
 
-
 #Don't need event_unique_id
 bike_df = bike_df.drop('event_unique_id', 1)
 
+#Don't need X
+bike_df = bike_df.drop('X', 1)
 
+#Don't need Y
+bike_df = bike_df.drop('Y', 1)
 
 #Hot encode the rest of the categorical data
 '''
@@ -141,32 +146,46 @@ bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep1.csv')
 
 
 '''
-Cleanup values
+Cleanup bike cost values
 '''
 bike_df['Cost_of_Bike'] = bike_df['Cost_of_Bike'].round()
 
 maxPrice = bike_df['Cost_of_Bike'].max()
 
+fig, ax = plt.subplots(3, constrained_layout=True)
+
+sns.boxplot(x='Cost_of_Bike', data=bike_df, ax=ax[0]).set(xlabel='', title='Cost of Bike With Outliers'),;
 
 # remove outliers
-q = bike_df["Cost_of_Bike"].quantile(0.99)
-df_filtered = bike_df[bike_df["Cost_of_Bike"] < q]
+q1 = bike_df["Cost_of_Bike"].quantile(0.25)
+q3 = bike_df["Cost_of_Bike"].quantile(0.75)
 
-print('max price', maxPrice)
-print(bike_df.loc[bike_df['Cost_of_Bike'] == maxPrice]['Bike_Model'])
+df_no_outliers = bike_df.loc[(bike_df["Cost_of_Bike"] > q1) & (bike_df["Cost_of_Bike"] < q3)]
+
+print(q3)
+
+print('Most expensive bike', maxPrice)
 bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep2.csv')
 
 
 '''
-Plotting stuff
+Plotting with no outliers
 '''
-test_plot_x = df_filtered['Cost_of_Bike']
-test_plot_y = df_filtered['Status'].apply(lambda x: 0 if x == 'STOLEN' else 1)
+test_plot_x = df_no_outliers['Cost_of_Bike']
+test_plot_y = df_no_outliers['Status'].apply(lambda x: 0 if x == 'STOLEN' else 1)
 
-plt.plot(test_plot_x, test_plot_y, marker='.')
+sns.boxplot(x='Cost_of_Bike', data=df_no_outliers, ax=ax[1]).set(xlabel='', title='Cost of Bike No Outliers'),
 
-plt.xlabel('Cost of Bike')
-plt.ylabel('Stolen?')
-plt.title('Cost vs Status')
+'''
+Pie Chart of stolen vs recovered
+'''
+stolenCount = bike_df[bike_df['Status'] == 'STOLEN']['Status'].count()
+recoveredCount = bike_df[bike_df['Status'] == 'RECOVERED']['Status'].count()
+
+labels = 'Stolen', 'Recovered'
+
+ax[2].pie([stolenCount, recoveredCount], labels=labels, autopct='%1.1f%%')
+
+
 
 plt.show()
