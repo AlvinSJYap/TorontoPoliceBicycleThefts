@@ -157,14 +157,9 @@ maxPrice = bike_df['Cost_of_Bike'].max()
 q1 = bike_df["Cost_of_Bike"].quantile(0.25)
 q3 = bike_df["Cost_of_Bike"].quantile(0.75)
 
-iqr = q3 - q1
+df_no_outliers = bike_df.loc[(bike_df["Cost_of_Bike"] > q1) & (bike_df["Cost_of_Bike"] < q3)]
 
-lower_bound  = q1 - (1.5  * iqr)
-upper_bound = q3 + (1.5 * iqr)
-
-df_no_outliers = bike_df.loc[(bike_df["Cost_of_Bike"] > lower_bound) & (bike_df["Cost_of_Bike"] < upper_bound)]
-
-print(df_no_outliers.describe(include='all', datetime_is_numeric=True))
+print(q3)
 
 print('Most expensive bike', maxPrice)
 bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep2.csv')
