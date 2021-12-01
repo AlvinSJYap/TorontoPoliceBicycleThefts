@@ -327,7 +327,7 @@ Remove columns from this data set that do not help the model
 bike_df = bike_df.drop('Occurrence_Date', 1)
 bike_df = bike_df.drop('Report_Date', 1)
 bike_df = bike_df.drop(['Bike_Make'], axis=1)
-bike_df = bike_df.drop('NeighbourhoodName', 1)
+
 bike_df = bike_df.drop(['Bike_Model'], axis=1)
 bike_df = bike_df.drop(['ObjectId2'], axis=1)
 bike_df = bike_df.drop(['Longitude'], axis=1)

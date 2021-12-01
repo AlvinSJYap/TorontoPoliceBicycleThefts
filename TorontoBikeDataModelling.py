@@ -41,7 +41,7 @@ trainX,testX,trainY,testY = train_test_split(X,Y, test_size = 0.2)
 
 
 
-dt_bike= DecisionTreeClassifier(criterion='entropy',max_depth=5, min_samples_split=20, random_state=99)
+dt_bike= DecisionTreeClassifier(criterion='entropy',max_depth=10, min_samples_split=20, random_state=99)
 dt_bike.fit(trainX,trainY)
 # 10 fold cross validation using sklearn and all the data i.e validate the data 
 from sklearn.model_selection import KFold
@@ -85,7 +85,7 @@ with open('D:/School/Fall 2021/Data Warehousing/GroupProject/TorontoPoliceBicycl
    export_graphviz(dt_bike, out_file = dotfile, feature_names = colnames)
 
 dotfile.close()
-
+'''
 import pickle
 
 filename = 'pickledBikeModel'
@@ -93,3 +93,5 @@ outfile = open(filename,'wb')
 
 pickle.dump(dt_bike,outfile)
 outfile.close()
+
+'''

@@ -165,7 +165,7 @@ df_no_outliers = bike_df.loc[(bike_df["Cost_of_Bike"] > q1) & (bike_df["Cost_of_
 print(q3)
 
 print('Most expensive bike', maxPrice)
-bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep2.csv')
+
 
 
 '''
