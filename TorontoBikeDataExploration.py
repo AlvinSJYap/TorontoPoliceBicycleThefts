@@ -9,6 +9,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import math
 import os
+import seaborn as sns
 
 def printSeparator(value):
   print('\n' * 4)
@@ -145,15 +146,17 @@ bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep1.csv')
 
 
 '''
-Cleanup values
+Cleanup bike cost values
 '''
 bike_df['Cost_of_Bike'] = bike_df['Cost_of_Bike'].round()
 
 maxPrice = bike_df['Cost_of_Bike'].max()
 
+fig, ax = plt.subplots(3, constrained_layout=True)
+
+sns.boxplot(x='Cost_of_Bike', data=bike_df, ax=ax[0]).set(xlabel='', title='Cost of Bike With Outliers'),;
 
 # remove outliers
-
 q1 = bike_df["Cost_of_Bike"].quantile(0.25)
 q3 = bike_df["Cost_of_Bike"].quantile(0.75)
 
@@ -166,23 +169,23 @@ bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep2.csv')
 
 
 '''
-Plotting stuff
+Plotting with no outliers
 '''
 test_plot_x = df_no_outliers['Cost_of_Bike']
 test_plot_y = df_no_outliers['Status'].apply(lambda x: 0 if x == 'STOLEN' else 1)
 
+sns.boxplot(x='Cost_of_Bike', data=df_no_outliers, ax=ax[1]).set(xlabel='', title='Cost of Bike No Outliers'),
+
+'''
+Pie Chart of stolen vs recovered
+'''
 stolenCount = bike_df[bike_df['Status'] == 'STOLEN']['Status'].count()
 recoveredCount = bike_df[bike_df['Status'] == 'RECOVERED']['Status'].count()
 
-fig1, ax1 = plt.subplots()
-
 labels = 'Stolen', 'Recovered'
-ax1.pie([stolenCount, recoveredCount], labels=labels, autopct='%1.1f%%')
-ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 
-import seaborn as sns
+ax[2].pie([stolenCount, recoveredCount], labels=labels, autopct='%1.1f%%')
 
-plt.figure(figsize=(17,7,))
-ax = sns.boxplot(x='Cost_of_Bike', data=df_no_outliers),;
+
 
 plt.show()
