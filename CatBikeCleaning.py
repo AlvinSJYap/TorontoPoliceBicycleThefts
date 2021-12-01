@@ -95,7 +95,7 @@ print(cat_bike_df.nunique())
 '''
 Occurrence / Report Month and Day of week. Both of these can be easily converted to 1-12 to indicate the month, and
 1-7 to indicate the day of the week.
-'''
+
 
 cat_bike_df.loc[cat_bike_df['Occurrence_DayOfWeek'].str.contains('monday', case=False),'Occurrence_DayOfWeek'] = '1'
 cat_bike_df.loc[cat_bike_df['Occurrence_DayOfWeek'].str.contains('tuesday', case=False),'Occurrence_DayOfWeek'] = '2'
@@ -147,6 +147,8 @@ cat_bike_df['Report_Month']= cat_bike_df['Report_Month'].astype('int32')
 printSeparator(' Occurence and Report Days/Months Coded')
 print(pd.unique(cat_bike_df['Occurrence_DayOfWeek'].values))
 print(pd.unique(cat_bike_df['Occurrence_Month'].values))
+'''
+
 
 '''
 Division is neatly set up where we can just remove the D from the value. NSA can be converted to either 0 or -1.
@@ -180,7 +182,6 @@ cat_bike_df['City']= cat_bike_df['City'].astype('int32')
 '''
 HoodId: This is a mixed data type because of the NSA and some ints being strings. We will replace it with a value of 0. 
 We will convert all the values into strings and then back into integerrs
-'''
 
 printSeparator(' Unique Values in Hood_id')
 cat_bike_df['Hood_ID'] = cat_bike_df['Hood_ID'].astype(str)
@@ -191,13 +192,18 @@ cat_bike_df['Hood_ID']= cat_bike_df['Hood_ID'].astype('int32')
 print(cat_bike_df.dtypes)
 
 '''
+
+
+'''
 NeighbourhoodName:
 We can drop this column because it's just the string value of hood_ID, we can match it later
 
 '''
+
+cat_bike_df= cat_bike_df.drop('Hood_ID',axis=1)
 printSeparator(' Unique Values in Neighbourhood Name')
 print(pd.unique(cat_bike_df['NeighbourhoodName'].values))
-cat_bike_df = cat_bike_df.drop('NeighbourhoodName', 1)
+#cat_bike_df = cat_bike_df.drop('NeighbourhoodName', 1)
 
 '''
 Location_Type
@@ -298,11 +304,20 @@ determining if a bike is to be returned. The cardinality is to high, and there s
 printSeparator(' Unique Values in Bike_Make')
 print(cat_bike_df['Bike_Make'].value_counts(normalize=True).head(20))
 cat_bike_df = cat_bike_df.drop(['Bike_Make'], axis=1)
-print(cat_bike_df.dtypes)
+
 print(cat_bike_df.nunique())
 
+'''
+Status:
+'''
+printSeparator(' Unique Values in Status')
+
+cat_bike_df.loc[cat_bike_df['Status'].str.contains('STOLEN', case=False),'Status'] = '0'
+cat_bike_df.loc[cat_bike_df['Status'].str.contains('RECOVERED', case=False),'Status'] = '1'
+print(cat_bike_df['Status'].value_counts(normalize=True).head(20))
+cat_bike_df['Status']=cat_bike_df['Status'].astype('int32')
 #replace the values from the old dataframe with those after we cleaned
-bike_df.loc[:, ['Primary_Offence','Occurrence_Month','Occurrence_DayOfWeek','Report_Month','Report_DayOfWeek','Division','City','Hood_ID','Location_Type','Premises_Type','Bike_Type','Bike_Colour','Status','Report_Lag']] = cat_bike_df[['Primary_Offence','Occurrence_Month','Occurrence_DayOfWeek','Report_Month','Report_DayOfWeek','Division','City','Hood_ID','Location_Type','Premises_Type','Bike_Type','Bike_Colour','Status','Report_Lag']]
+bike_df.loc[:, ['Primary_Offence','Division','City','Location_Type','Premises_Type','Bike_Type','Bike_Colour','Status','Report_Lag']] = cat_bike_df[['Primary_Offence','Division','City','Location_Type','Premises_Type','Bike_Type','Bike_Colour','Status','Report_Lag']]
 
 
 '''
@@ -321,5 +336,9 @@ bike_df = bike_df.drop(['Unnamed: 0'], axis=1)
 #bike_df = bike_df.drop(['X'], axis=1)
 #bike_df = bike_df.drop(['Y'], axis=1)
 bike_df = bike_df.drop(['OBJECTID'], axis=1)
+bike_df = bike_df.drop('Hood_ID',axis=1)
+bike_df['Status']=bike_df['Status'].astype('int32')
 
 bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep2.csv')
+dummy_df = pd.get_dummies(bike_df)
+dummy_df.to_csv('.\data\Bicycle_Thefts_CleanStep3.csv')
