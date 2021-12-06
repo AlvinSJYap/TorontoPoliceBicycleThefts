@@ -11,7 +11,7 @@ import pandas as pd
 
 
 import os
-path = ".\data"
+path = "C:/Users/micha/OneDrive/Desktop/Centennial Semester 6/Comp 309/Week 13/TorontoPoliceBicycleThefts/data"
 filename = 'Bicycle_Thefts_CleanStep3.csv'
 fullpath = os.path.join(path,filename)
 bike_df = pd.read_csv(fullpath)
@@ -22,12 +22,7 @@ colnames=bike_df.columns.values.tolist()
 colnames.remove('Status')
 
 
-
-
-
-
 from sklearn.tree import DecisionTreeClassifier
-
 
 
 import numpy as np
@@ -51,6 +46,17 @@ from sklearn.model_selection import cross_val_score
 score = np.mean(cross_val_score(dt_bike, trainX, trainY, scoring='accuracy', cv=crossvalidation, n_jobs=1))
 print(score)
 
+# Feature 21, 11 are important for prediction, while feature 2, 7 are 
+# important but far less important 
+#### Get feature importance
+from matplotlib import pyplot
+importance = dt_bike.feature_importances_
+# summarize feature importance
+for i,v in enumerate(importance):
+	print('Feature: %0d, Score: %.5f' % (i,v))
+# plot feature importance
+pyplot.bar([x for x in range(len(importance))], importance)
+pyplot.show()
 
 
 ### Test the model using the testing data
