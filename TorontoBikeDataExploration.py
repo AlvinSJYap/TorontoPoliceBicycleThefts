@@ -141,7 +141,6 @@ The initial Data is cleaned up, we can save a copy of this as step 1. In step 2,
 in the data set and can be removed.
 '''
 
-bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep1.csv')
 
 
 '''
@@ -158,14 +157,18 @@ sns.boxplot(x='Cost_of_Bike', data=bike_df, ax=ax[0]).set(xlabel='', title='Cost
 # remove outliers
 q1 = bike_df["Cost_of_Bike"].quantile(0.25)
 q3 = bike_df["Cost_of_Bike"].quantile(0.75)
+IQR = q3-q1
+upperbound = q3 + (1.5 * IQR);
+lowerbound = q1 - (1.5 * IQR);
 
-df_no_outliers = bike_df.loc[(bike_df["Cost_of_Bike"] > q1) & (bike_df["Cost_of_Bike"] < q3)]
+df_no_outliers = bike_df.loc[(bike_df["Cost_of_Bike"] < upperbound) & (bike_df["Cost_of_Bike"] > lowerbound)]
 
 print(q3)
 
 print('Most expensive bike', maxPrice)
 
 
+df_no_outliers.to_csv('.\data\Bicycle_Thefts_CleanStep1.csv')
 
 '''
 Plotting with no outliers
