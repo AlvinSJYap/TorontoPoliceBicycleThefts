@@ -303,7 +303,7 @@ determining if a bike is to be returned. The cardinality is to high, and there s
 '''
 printSeparator(' Unique Values in Bike_Make')
 print(cat_bike_df['Bike_Make'].value_counts(normalize=True).head(20))
-cat_bike_df = cat_bike_df.drop(['Bike_Make'], axis=1)
+
 
 print(cat_bike_df.nunique())
 
@@ -328,7 +328,7 @@ bike_df = bike_df.drop('Occurrence_Date', 1)
 bike_df = bike_df.drop('Report_Date', 1)
 
 
-#bike_df = bike_df.drop(['Bike_Model'], axis=1)
+
 bike_df = bike_df.drop(['ObjectId2'], axis=1)
 bike_df = bike_df.drop(['Longitude'], axis=1)
 bike_df = bike_df.drop(['Latitude'], axis=1)
@@ -341,7 +341,7 @@ bike_df = bike_df.drop(['OBJECTID'], axis=1)
 bike_df = bike_df.drop('Hood_ID',axis=1)
 bike_df['Status']=bike_df['Status'].astype('int32')
 
-bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep2.csv')
+
 
 '''
 create heatmap for the dataframe to see if the correlation. Because alot of the data with regards to Occurence and Report is captured
@@ -358,7 +358,10 @@ cor = bike_df.corr()
 print(cor)
 sns.heatmap(cor, annot=True, cmap=plt.cm.Reds)
 
+printSeparator(' Cor_Target: ')
+
 cor_target = abs(cor["Status"])
+print(cor_target)
 plt.show()
 
 print(bike_df.columns)
@@ -379,14 +382,13 @@ print(cor)
 sns.heatmap(cor, annot=True, cmap=plt.cm.Reds)
 
 cor_target = abs(cor["Status"])
+print(cor_target)
 plt.show()
-
 
 '''
 preform a chi-square test for bike_model and bike_make.
 
-Null hypothesis: Bike_model and Status are correlated, Bike_Make and Status are correlated. If we reject the null Hypothesis, we can 
-delete the column.
+Null hypothesis: Bike_model and Status are independent of each other, Bike_Make and Status are Independent of Each Other. 
 '''
 from scipy.stats import chi2_contingency 
 chisqt = pd.crosstab(bike_df.Status,bike_df.Bike_Make, margins=True)
@@ -402,7 +404,7 @@ if chi2_contingency(value)[1] <= significance_level:
     print('Reject NULL HYPOTHESIS') 
 else: 
     print('ACCEPT NULL HYPOTHESIS') 
-bike_df = bike_df.drop(['Bike_Make'], axis=1)
+
 
 
 
@@ -419,8 +421,66 @@ if chi2_contingency(value2)[1] <= significance_level:
     print('Reject NULL HYPOTHESIS') 
 else: 
     print('ACCEPT NULL HYPOTHESIS') 
-bike_df = bike_df.drop(['Bike_Model'], axis=1)
+
+'''
+Because we reject the NULL hypothesis for both these columns, we cannot simply drop them here.
+
+'''
+printSeparator(' Unique Values in Bike_Make')
+print(bike_df['Bike_Make'].value_counts(normalize=True).head(20))
+print(pd.unique(bike_df['Bike_Make'].values))
+
+bike_df.loc[bike_df['Bike_Make'].str.contains('unk', case=False),'Bike_Make'] = 'UNKNOWN'
+bike_df.loc[bike_df['Bike_Make'].str.contains('uknow', case=False),'Bike_Make'] = 'UNKNOWN'
+bike_df.loc[bike_df['Bike_Make'].str.contains('unknown', case=False),'Bike_Make'] = 'UNKNOWN'
+bike_df = bike_df.replace(to_replace= r'\\', value= '', regex=True)
+
+
+print(pd.unique(bike_df['Bike_Make'].values))
+
+
+lowOccurenceMake = bike_df.Bike_Make.value_counts().loc[lambda x: x<=50].reset_index()['index']
+print(lowOccurenceMake)
+
+for x in lowOccurenceMake:
+  
+    bike_df.loc[bike_df['Bike_Make'].str.contains(x, case=False,regex=False),'Bike_Make'] = 'Other'
+
+print(bike_df['Bike_Make'].value_counts().head(20))
+
+
+
+'''
+
+Because we reject the NULL hypothesis for Bike Model. Due to the high cardinality of this column and the fact that half the data
+is unkown, i will instead split this data between known and unkown.
+'''
+printSeparator(' Unique Values in Bike_Model:Before')
+print(bike_df['Bike_Model'].value_counts().head(20))
+
+bike_df.loc[bike_df['Bike_Model'].str.contains('Unknown', case=False),'Bike_Model'] = 'UNKNOWN'
+bike_df.loc[bike_df['Bike_Model'].str.contains('?', case=False, regex=False),'Bike_Model'] = 'UNKNOWN'
+
+mask = bike_df.Bike_Model != 'UNKNOWN'
+
+bike_df.loc[mask, 'Bike_Model'] = 'KNOWN'
+
+
+ 
+
+
+
+
+                 
+printSeparator(' Unique Values in Bike_Model:After')       
+print(bike_df['Bike_Model'].value_counts().head(20))
+print(bike_df.nunique())
+bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep2.csv')
+
+
+
 
 print(bike_df.columns)
+print(bike_df.nunique())
 dummy_df = pd.get_dummies(bike_df)
 dummy_df.to_csv('.\data\Bicycle_Thefts_CleanStep3.csv')
