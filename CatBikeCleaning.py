@@ -326,9 +326,9 @@ Remove columns from this data set that do not help the model
 '''
 bike_df = bike_df.drop('Occurrence_Date', 1)
 bike_df = bike_df.drop('Report_Date', 1)
-bike_df = bike_df.drop(['Bike_Make'], axis=1)
 
-bike_df = bike_df.drop(['Bike_Model'], axis=1)
+
+#bike_df = bike_df.drop(['Bike_Model'], axis=1)
 bike_df = bike_df.drop(['ObjectId2'], axis=1)
 bike_df = bike_df.drop(['Longitude'], axis=1)
 bike_df = bike_df.drop(['Latitude'], axis=1)
@@ -336,9 +336,91 @@ bike_df = bike_df.drop(['Unnamed: 0'], axis=1)
 #bike_df = bike_df.drop(['X'], axis=1)
 #bike_df = bike_df.drop(['Y'], axis=1)
 bike_df = bike_df.drop(['OBJECTID'], axis=1)
+
+
 bike_df = bike_df.drop('Hood_ID',axis=1)
 bike_df['Status']=bike_df['Status'].astype('int32')
 
 bike_df.to_csv('.\data\Bicycle_Thefts_CleanStep2.csv')
+
+'''
+create heatmap for the dataframe to see if the correlation. Because alot of the data with regards to Occurence and Report is captured
+in the report lag , we can safely drop those columns. We have very 
+'''
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+print(bike_df.columns)
+
+#Using Pearson Correlation
+plt.figure(0,figsize=(12,10))
+cor = bike_df.corr()
+print(cor)
+sns.heatmap(cor, annot=True, cmap=plt.cm.Reds)
+
+cor_target = abs(cor["Status"])
+plt.show()
+
+print(bike_df.columns)
+
+bike_df = bike_df.drop(['Occurrence_DayOfMonth'],1)
+bike_df = bike_df.drop(['Occurrence_DayOfYear'],1)
+bike_df = bike_df.drop(['Occurrence_Year'],1)
+bike_df = bike_df.drop(['Report_DayOfMonth'],1)
+bike_df = bike_df.drop(['Report_DayOfYear'],1)
+ike_df = bike_df.drop(['Report_DayOfWeek'],1)
+bike_df = bike_df.drop(['Report_Year'],1)
+bike_df = bike_df.drop(['Report_Hour'],1)
+
+#Using Pearson Correlation
+plt.figure(1,figsize=(12,10))
+cor = bike_df.corr()
+print(cor)
+sns.heatmap(cor, annot=True, cmap=plt.cm.Reds)
+
+cor_target = abs(cor["Status"])
+plt.show()
+
+
+'''
+preform a chi-square test for bike_model and bike_make.
+
+Null hypothesis: Bike_model and Status are correlated, Bike_Make and Status are correlated. If we reject the null Hypothesis, we can 
+delete the column.
+'''
+from scipy.stats import chi2_contingency 
+chisqt = pd.crosstab(bike_df.Status,bike_df.Bike_Make, margins=True)
+print(chisqt)
+
+value = np.array([chisqt.iloc[0][0:-1].values,
+                  chisqt.iloc[1][0:-1].values])
+print(chi2_contingency(value)[0:-1])
+
+significance_level = 0.05
+print("p value: " + str(chi2_contingency(value)[1])) 
+if chi2_contingency(value)[1] <= significance_level: 
+    print('Reject NULL HYPOTHESIS') 
+else: 
+    print('ACCEPT NULL HYPOTHESIS') 
+bike_df = bike_df.drop(['Bike_Make'], axis=1)
+
+
+
+chisqt2 = pd.crosstab(bike_df.Status,bike_df.Bike_Model, margins=True)
+print(chisqt2)
+
+value2 = np.array([chisqt2.iloc[0][0:-1].values,
+                  chisqt2.iloc[1][0:-1].values])
+print(chi2_contingency(value2)[0:-1])
+
+significance_level = 0.05
+print("p value: " + str(chi2_contingency(value2)[1])) 
+if chi2_contingency(value2)[1] <= significance_level: 
+    print('Reject NULL HYPOTHESIS') 
+else: 
+    print('ACCEPT NULL HYPOTHESIS') 
+bike_df = bike_df.drop(['Bike_Model'], axis=1)
+
+print(bike_df.columns)
 dummy_df = pd.get_dummies(bike_df)
 dummy_df.to_csv('.\data\Bicycle_Thefts_CleanStep3.csv')

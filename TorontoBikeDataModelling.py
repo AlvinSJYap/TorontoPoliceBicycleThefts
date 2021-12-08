@@ -11,7 +11,7 @@ import pandas as pd
 
 
 import os
-path = "C:/Users/micha/OneDrive/Desktop/Centennial Semester 6/Comp 309/Week 13/TorontoPoliceBicycleThefts/data"
+path = "data"
 filename = 'Bicycle_Thefts_CleanStep3.csv'
 fullpath = os.path.join(path,filename)
 bike_df = pd.read_csv(fullpath)
