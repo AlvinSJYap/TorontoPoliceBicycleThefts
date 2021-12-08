@@ -8,7 +8,10 @@ create a model
 """
 
 import pandas as pd
+import os
 
+path = os.path.dirname(os.path.realpath(__file__))
+filename = 'data\\Bicycle_Thefts_CleanStep3.csv'
 
 import os
 path = "data"
@@ -87,7 +90,8 @@ plt.show()
 from sklearn import tree
 tree.plot_tree(dt_bike)
 from sklearn.tree import export_graphviz
-with open('D:/School/Fall 2021/Data Warehousing/GroupProject/TorontoPoliceBicycleThefts/data/dtree2.dot', 'w') as dotfile:
+#with open('D:/School/Fall 2021/Data Warehousing/GroupProject/TorontoPoliceBicycleThefts/data/dtree2.dot', 'w') as dotfile:
+with open(os.path.join(path,'data\\dtree2.dot'), 'w') as dotfile:
    export_graphviz(dt_bike, out_file = dotfile, feature_names = colnames)
 
 dotfile.close()
