@@ -93,27 +93,34 @@ fs2 = SelectKBest(score_func=chi2, k=75)
 fs2.fit(X_res,y_res)
 # get the indices for the target columns
 targetCols =fs2.get_support(indices=True)
+
+printSeparator('Target Cols')
 print(targetCols)
 
 
-#update X to only include these new columns from the dataframe
+#update X to only include these new columns from the dataframe, resample
+printSeparator('X_res')
+bike_df = bike_df.drop('Status',1)
+X2=bike_df.iloc[:,targetCols]
 
-X=bike_df.iloc[:,targetCols]
-print(X)
+print(X2.columns)
 
+trainX2,testX2,trainY2,testY2 = train_test_split(X2,Y, test_size = 0.2)
+X_res2, y_res2 = sm.fit_resample(trainX2, trainY2)
 
 
 
 print(sortedArray)
 dt_bike= DecisionTreeClassifier(criterion='entropy',max_depth=8, min_samples_split=20, random_state=99)
-dt_bike.fit(X_res,y_res)
+dt_bike.fit(X_res2,y_res2)
 # 10 fold cross validation using sklearn and all the data i.e validate the data 
 from sklearn.model_selection import KFold
 #help(KFold)
 crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
 from sklearn.model_selection import cross_val_score
-score = np.mean(cross_val_score(dt_bike, X_res, y_res, scoring='accuracy', cv=crossvalidation, n_jobs=1))
-#print(score)
+printSeparator('Decision Tree Cross Validation Training Score:')
+score = np.mean(cross_val_score(dt_bike, X_res2, y_res2, scoring='accuracy', cv=crossvalidation, n_jobs=1))
+print(score)
 
 # Feature 21, 11 are important for prediction, while feature 2, 7 are 
 # important but far less important 
@@ -121,22 +128,72 @@ score = np.mean(cross_val_score(dt_bike, X_res, y_res, scoring='accuracy', cv=cr
 
 importance = dt_bike.feature_importances_
 # summarize feature importance
-#for i,v in enumerate(importance):
-#	print('Feature: %0d, Score: %.5f' % (i,v))
+for i,v in enumerate(importance):
+	print('Feature: %0d, Score: %.5f' % (i,v))
 # plot feature importance
 pyplot.bar([x for x in range(len(importance))], importance)
 pyplot.show()
 
 
 ### Test the model using the testing data
-testY_predict = dt_bike.predict(testX)
+testY_predict = dt_bike.predict(testX2)
 
 testY_predict.dtype
 #Import scikit-learn metrics module for accuracy calculation
+
+
+'''
+Create logistic Regresssion
+
+
+'''
+from sklearn import linear_model
+
+
+printSeparator('Logistic Regression')
+logX_train, logX_test, logY_train, logY_test = train_test_split(X2, Y, test_size=0.2, random_state=0)
+logX_res, logy_res = sm.fit_resample(logX_train, logY_train)
+
+printSeparator('Logistic Regression Cross Validation Training Score:')
+
+logScore = cross_val_score(linear_model.LogisticRegression(solver='sag'), logX_res, logy_res, scoring='accuracy', cv=10)
+print (logScore)
+print (logScore.mean())
+
+
+
+
+
+
+'''
+Create Kneighbours
+
+'''
+
+from sklearn.neighbors import KNeighborsClassifier
+
+printSeparator('KNeighbors')
+forX_train, forX_test, forY_train, forY_test = train_test_split(X2, Y, test_size=0.2, random_state=0)
+forX_res, fory_res = sm.fit_resample(forX_train, forY_train)
+
+forScore = cross_val_score(KNeighborsClassifier(), forX_res, fory_res, scoring='accuracy', cv=10)
+print (forScore)
+print (forScore.mean())
+
+
+'''
+Final Predict: Test
+
+'''
+
+
+
+printSeparator('Test For Decision Tree')
 from sklearn import metrics 
 labels = Y.unique()
 print(labels)
-print("Accuracy:",metrics.accuracy_score(testY, testY_predict))
+print("Accuracy:",metrics.accuracy_score(testY2, testY_predict))
+
 #Let us print the confusion matrix
 from sklearn.metrics import confusion_matrix
 print("Confusion matrix \n" , confusion_matrix(testY, testY_predict, labels))
@@ -155,14 +212,22 @@ ax.xaxis.set_ticklabels(['Stolen','Recovered']); ax.yaxis.set_ticklabels(['Stole
 plt.show()
 from sklearn import tree
 tree.plot_tree(dt_bike)
+
+
+from sklearn import tree
+tree.plot_tree(dt_bike)
 from sklearn.tree import export_graphviz
 #with open('D:/School/Fall 2021/Data Warehousing/GroupProject/TorontoPoliceBicycleThefts/data/dtree2.dot', 'w') as dotfile:
 with open('./data/dtree2.dot', 'w') as dotfile:
 
-   export_graphviz(dt_bike, out_file = dotfile, feature_names = colnames)
+   export_graphviz(dt_bike, out_file = dotfile, feature_names = targetCols)
 
 dotfile.close()
+
+
+
 '''
+
 import pickle
 
 filename = 'pickledBikeModel'
