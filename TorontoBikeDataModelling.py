@@ -8,11 +8,11 @@ create a model
 """
 
 import pandas as pd
-
-
 import os
-path = "C:/Users/micha/OneDrive/Desktop/Centennial Semester 6/Comp 309/Week 13/TorontoPoliceBicycleThefts/data"
-filename = 'Bicycle_Thefts_CleanStep3.csv'
+
+path = os.path.dirname(os.path.realpath(__file__))
+filename = 'data\\Bicycle_Thefts_CleanStep3.csv'
+
 fullpath = os.path.join(path,filename)
 bike_df = pd.read_csv(fullpath)
 bike_df = bike_df.iloc[: , 1:]
@@ -87,7 +87,8 @@ plt.show()
 from sklearn import tree
 tree.plot_tree(dt_bike)
 from sklearn.tree import export_graphviz
-with open('D:/School/Fall 2021/Data Warehousing/GroupProject/TorontoPoliceBicycleThefts/data/dtree2.dot', 'w') as dotfile:
+#with open('D:/School/Fall 2021/Data Warehousing/GroupProject/TorontoPoliceBicycleThefts/data/dtree2.dot', 'w') as dotfile:
+with open(os.path.join(path,'data\\dtree2.dot'), 'w') as dotfile:
    export_graphviz(dt_bike, out_file = dotfile, feature_names = colnames)
 
 dotfile.close()
