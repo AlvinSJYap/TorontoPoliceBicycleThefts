@@ -135,11 +135,7 @@ pyplot.bar([x for x in range(len(importance))], importance)
 pyplot.show()
 
 
-### Test the model using the testing data
-testY_predict = dt_bike.predict(testX2)
 
-testY_predict.dtype
-#Import scikit-learn metrics module for accuracy calculation
 
 
 '''
@@ -186,7 +182,11 @@ Final Predict: Test
 
 '''
 
+### Test the model using the testing data
+testY_predict = dt_bike.predict(testX2)
 
+testY_predict.dtype
+#Import scikit-learn metrics module for accuracy calculation
 
 printSeparator('Test For Decision Tree')
 from sklearn import metrics 
