@@ -1,8 +1,46 @@
-﻿@{
+﻿@model frontend.Models.BikeTheftViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <form asp-action="Index" method="post">
+        <div class="mb-3">
+            <label asp-for="Bike_Model" class="form-label">Bike Model</label>
+            <input asp-for="Bike_Model" class="form-control" id="bike-model" placeholder="Bike Model">
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Bike_Cost" class="form-label">Bike Cost</label>
+            <input asp-for="Bike_Cost" class="form-control" id="bike-cost" placeholder="Bike Cost">
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Bike_Colour" class="form-label">Bike Colour</label>
+            <input asp-for="Bike_Colour" class="form-control" id="bike-colour" placeholder="Bike Colour">
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Occurence_Date" class="form-label">Occurence Date</label>
+            <input asp-for="Occurence_Date" class="form-control" id="occurence-date" placeholder="Occurence Date">
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Primary_Offence" class="form-label">Primary Offence</label>
+            <input asp-for="Primary_Offence" class="form-control" id="primary-offence" placeholder="Primary Offence">
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Neighbourhood_Name" class="form-label">Neighbourhood Name</label>
+            <input asp-for="Neighbourhood_Name" class="form-control" id="neighbourhood-name" placeholder="Neighbourhood Name">
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Location_Type" class="form-label">Location Type</label>
+            <input asp-for="Location_Type" class="form-control" id="location-type" placeholder="Location Type">
+        </div>
+
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
 </div>
