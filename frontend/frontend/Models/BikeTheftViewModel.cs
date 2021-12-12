@@ -7,12 +7,10 @@ namespace frontend.Models
 {
     public class BikeTheftViewModel
     {
-        public string Bike_Model { get; set; }
-        public int Bike_Cost { get; set; }
-        public string Bike_Colour { get; set; }
-        public string Occurence_Date { get; set; }
-        public string Primary_Offence { get; set; }
-        public string Neighbourhood_Name { get; set; }
-        public string Location_Type { get; set; }
+        public int Occurence_Hour { get; set; }
+        public int Bike_Speed { get; set; }
+        public int Cost_of_Bike { get; set; }
+        public int Report_Lag { get; set; }
+        public int Primary_Offence_THEFT { get; set; }
     }
 }

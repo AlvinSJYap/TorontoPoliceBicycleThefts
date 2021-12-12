@@ -6,41 +6,35 @@
 
 <div class="container">
     <form asp-action="Index" method="post">
+
+
         <div class="mb-3">
-            <label asp-for="Bike_Model" class="form-label">Bike Model</label>
-            <input asp-for="Bike_Model" class="form-control" id="bike-model" placeholder="Bike Model">
+            <label asp-for="Occurence_Hour" class="form-label">Occurence Hour</label>
+            <input asp-for="Occurence_Hour" class="form-control" id="occurence-hour" placeholder="Occurence Hour">
         </div>
 
         <div class="mb-3">
-            <label asp-for="Bike_Cost" class="form-label">Bike Cost</label>
-            <input asp-for="Bike_Cost" class="form-control" id="bike-cost" placeholder="Bike Cost">
+            <label asp-for="Bike_Speed" class="form-label">Bike Speed</label>
+            <input asp-for="Bike_Speed" class="form-control" id="bike-speed" placeholder="Bike Speed">
         </div>
 
         <div class="mb-3">
-            <label asp-for="Bike_Colour" class="form-label">Bike Colour</label>
-            <input asp-for="Bike_Colour" class="form-control" id="bike-colour" placeholder="Bike Colour">
+            <label asp-for="Cost_of_Bike" class="form-label">Bike Cost</label>
+            <input asp-for="Cost_of_Bike" class="form-control" id="bike-cost" placeholder="Bike Cost">
         </div>
 
         <div class="mb-3">
-            <label asp-for="Occurence_Date" class="form-label">Occurence Date</label>
-            <input asp-for="Occurence_Date" class="form-control" id="occurence-date" placeholder="Occurence Date">
+            <label asp-for="Report_Lag" class="form-label">Report_Lag</label>
+            <input asp-for="Report_Lag" class="form-control" id="report-lag" placeholder="Report Lag">
         </div>
 
         <div class="mb-3">
-            <label asp-for="Primary_Offence" class="form-label">Primary Offence</label>
-            <input asp-for="Primary_Offence" class="form-control" id="primary-offence" placeholder="Primary Offence">
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Neighbourhood_Name" class="form-label">Neighbourhood Name</label>
-            <input asp-for="Neighbourhood_Name" class="form-control" id="neighbourhood-name" placeholder="Neighbourhood Name">
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="Location_Type" class="form-label">Location Type</label>
-            <input asp-for="Location_Type" class="form-control" id="location-type" placeholder="Location Type">
+            <label asp-for="Primary_Offence_THEFT" class="form-label">Primary Offence Theft</label>
+            <input asp-for="Primary_Offence_THEFT" class="form-control" id="primary-offence" placeholder="Primary Offence">
         </div>
 
         <button class="btn btn-primary" type="submit">Submit</button>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mt-5"></div>
     </form>
 </div>
