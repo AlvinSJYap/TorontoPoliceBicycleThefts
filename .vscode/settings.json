@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/bcf92bf3-6297-4cbe-bd63-dcd00cd8f970/resourceGroups/appsvc_linux_centralus_basic/providers/Microsoft.Web/sites/comp309-Group2-FlaskAPI",
+    "appService.deploySubpath": "."
+}
