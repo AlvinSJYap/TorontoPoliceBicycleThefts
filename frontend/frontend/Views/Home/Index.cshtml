@@ -1,0 +1,40 @@
+﻿@model frontend.Models.BikeTheftViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+    <form asp-action="Index" method="post">
+
+
+        <div class="mb-3">
+            <label asp-for="Occurence_Hour" class="form-label">Occurence Hour</label>
+            <input asp-for="Occurence_Hour" class="form-control" id="occurence-hour" placeholder="Occurence Hour">
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Bike_Speed" class="form-label">Bike Speed</label>
+            <input asp-for="Bike_Speed" class="form-control" id="bike-speed" placeholder="Bike Speed">
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Cost_of_Bike" class="form-label">Bike Cost</label>
+            <input asp-for="Cost_of_Bike" class="form-control" id="bike-cost" placeholder="Bike Cost">
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Report_Lag" class="form-label">Report_Lag</label>
+            <input asp-for="Report_Lag" class="form-control" id="report-lag" placeholder="Report Lag">
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Primary_Offence_THEFT" class="form-label">Primary Offence Theft</label>
+            <input asp-for="Primary_Offence_THEFT" class="form-control" id="primary-offence" placeholder="Primary Offence">
+        </div>
+
+        <button class="btn btn-primary" type="submit">Submit</button>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mt-5"></div>
+    </form>
+</div>
