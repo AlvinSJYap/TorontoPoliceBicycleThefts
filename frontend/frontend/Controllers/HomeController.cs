@@ -48,8 +48,8 @@ namespace frontend.Controllers
                 var json = JsonConvert.SerializeObject(list);
                 var data = new StringContent(json, Encoding.UTF8, "application/json");
 
-                //var url = "https://comp309-group2-flaskapi.azurewebsites.net/predict";
-                var url = "http://127.0.0.1:12345/predict";
+                var url = "https://comp309-group2-flaskapi.azurewebsites.net/predict";
+                //var url = "http://127.0.0.1:12345/predict";
 
                 var response = await client.PostAsync(url, data);
 
