@@ -5,8 +5,8 @@ Build a predictive service based on certain features that provide a classificati
 Here's some examples of features in json, that you could use to test in the body of the POST request:
 
 [
-    {"Occurrence_Year": 2015, "Occurrence_DayOfMonth": 14, "Division": 22, "Report_hour": 18, "Bike_Speed": 30, "Cost_of_Bike": 1600, "Bike_Colour_RED": 1, "Bike_Colour_BLK": 0 },
-    {"Occurrence_Year": 2020, "Occurrence_DayOfMonth": 5, "Division": 31, "Report_hour": 14, "Bike_Speed": 10, "Cost_of_Bike": 500, "Bike_Colour_RED": 0, "Bike_Colour_BLK": 1 }
+   {"Occurrence_Year": 2015, "Occurrence_DayOfMonth": 14, "Division": 22, "Report_hour": 18, "Bike_Speed": 30, "Cost_of_Bike": 1600, "Bike_Colour_RED": 1, "Bike_Colour_BLK": 0 },
+   {"Occurrence_Year": 2020, "Occurrence_DayOfMonth": 5, "Division": 31, "Report_hour": 14, "Bike_Speed": 10, "Cost_of_Bike": 500, "Bike_Colour_RED": 0, "Bike_Colour_BLK": 1 }
 ]
 
 '''
@@ -20,7 +20,7 @@ import sys
 import os
 
 
-app = Flask(__name__)
+app = Flask("TorontoBikeAPI")
 # Adding cors to flask
 CORS(app)
 
@@ -54,11 +54,31 @@ def predict():
         print ('Train the model first')
         return ('No models are available')
 
+# runs in production
+if __name__ == 'app':
+    try:
+        path = os.path.dirname(os.path.realpath(__file__))
+        filename1 = 'data\\models\\logistic\\model_lr2.pkl'
+        filename2 = 'data\\models\\logistic\\model_columns.pkl'
+        print("path loading: " + os.path.join(path, filename1))
+        # Load lr model
+        lr = joblib.load(os.path.join(path, filename1)) 
+        print ('Model loaded')
+        # Load columns model
+        model_columns = joblib.load(os.path.join(path, filename2))
+        print ('Model columns loaded')
+        print(lr)
+    except Exception as e: print(e)
+
+
+## runs only in development mode
 if __name__ == '__main__':
     try:
         port = int(sys.argv[1])
     except:
         port = 12345
+    
+    print("loaded")
 
     path = os.path.dirname(os.path.realpath(__file__))
     filename1 = 'data\\models\\logistic\\model_lr2.pkl'
