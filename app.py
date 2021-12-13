@@ -58,8 +58,8 @@ def predict():
 if __name__ == 'app':
     try:
         path = os.path.dirname(os.path.realpath(__file__))
-        filename1 = 'data\\models\\logistic\\model_lr2.pkl'
-        filename2 = 'data\\models\\logistic\\model_columns.pkl'
+        filename1 = 'data/models/logistic/model_lr2.pkl'
+        filename2 = 'data/models/logistic/model_columns.pkl'
         print("path loading: " + os.path.join(path, filename1))
         # Load lr model
         lr = joblib.load(os.path.join(path, filename1)) 
