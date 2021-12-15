@@ -50,6 +50,11 @@ print(bike_df.isnull().sum())
 
 printSeparator('Mean of Numerical Columns:')
 print(bike_df.mean())
+
+
+printSeparator('Number of Distinct Values in Status:')
+
+print(bike_df['Status'].value_counts(normalize=True).head(20))
 '''
 There are 35 columns and 25569 rows in the bike dataframe.
 2 Columns should be datetime but are coming out as string. We can clean this up
@@ -111,18 +116,16 @@ Looking at status, we have 3 categories, however the 3rd category is unknown. Th
 in any case for our prediction since it inidicates that there was no colncusion (no follow up on if the bike was
                                                                                  found or not).
 
-Get the row #'s that contain unknown and remove them
+
 '''
 
 #These are the rows that contain unknown in the status column.
 
-dropped_rows = bike_df[ bike_df['Status'] == 'UNKNOWN'].index
 
-print(dropped_rows)
+bike_df.loc[bike_df['Status'].str.contains('UNKNOWN', case=False),'Status'] = 'STOLEN'
 
-bike_df = bike_df.drop(dropped_rows)
 
-bike_df.reset_index()
+
 
 print(bike_df)
 
