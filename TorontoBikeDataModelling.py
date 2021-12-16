@@ -227,7 +227,7 @@ dotfile.close()
 
 
 
-
+'''
 import pickle
 
 filename = 'pickledBikeModel'
@@ -235,6 +235,6 @@ outfile = open(filename,'wb')
 
 pickle.dump(dt_bike,outfile)
 outfile.close()
-
+'''
 
 
