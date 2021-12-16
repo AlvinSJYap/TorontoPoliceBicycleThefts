@@ -196,18 +196,19 @@ print("Accuracy:",metrics.accuracy_score(testY2, testY_predict))
 
 #Let us print the confusion matrix
 from sklearn.metrics import confusion_matrix
-print("Confusion matrix \n" , confusion_matrix(testY, testY_predict, labels))
+print("Confusion matrix \n" , confusion_matrix(testY, testY_predict))
 
 
 import seaborn as sns
 import matplotlib.pyplot as plt     
-cm = confusion_matrix(testY, testY_predict, labels)
+cm = confusion_matrix(testY, testY_predict)
 ax= plt.subplot()
 sns.heatmap(cm, annot=True, ax = ax); #annot=True to annotate cells
 
 # labels, title and ticks
-ax.set_xlabel('Predicted labels');ax.set_ylabel('True labels'); 
-ax.set_title('Confusion Matrix'); 
+ax.set_xlabel('Predicted labels');
+ax.set_ylabel('True labels');
+ax.set_title('Confusion Matrix');
 ax.xaxis.set_ticklabels(['Stolen','Recovered']); ax.yaxis.set_ticklabels(['Stolen','Recovered']);
 plt.show()
 from sklearn import tree
@@ -220,7 +221,7 @@ from sklearn.tree import export_graphviz
 #with open('D:/School/Fall 2021/Data Warehousing/GroupProject/TorontoPoliceBicycleThefts/data/dtree2.dot', 'w') as dotfile:
 with open('./data/dtree2.dot', 'w') as dotfile:
 
-   export_graphviz(dt_bike, out_file = dotfile, feature_names = targetCols)
+  export_graphviz(dt_bike, out_file = dotfile, feature_names = targetCols)
 
 dotfile.close()
 
